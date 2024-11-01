@@ -73,33 +73,26 @@ function AppContent({ navigationHistory, setNavigationHistory }) {
 
     return (
         <>
-            <Header navigationHistory={navigationHistory} />
-            {/* Breadcrumb display below Header */}
-            <div
-            className="breadcrumb"
-            style={{
-                backgroundColor: '#333',
-                color: 'white',
-                padding: '10px',
-                fontSize: '16px',
-            }}
-        >
-            {breadcrumb.length > 0 ? breadcrumb : "Home"}
-        </div>
-            <Routes>
-                <Route path={HOME_PATH} element={<Home />} />
-                <Route path="/event/:eventName/:eventDate" element={<Event />} />
-                <Route path="/cart/:eventName/:eventDate" element={<Cart />} />
-                <Route path="/tickets/:eventName/:eventDate" element={<Tickets />} />
-                <Route path="/confirmation" element={<PurchaseConfirmation />} />
-                <Route path="/events/:category" element={<Home />} />
-            </Routes>
+            <div style={{ position: 'fixed', top: 0, width: '100%', zIndex: 1000 }}>
+                <Header navigationHistory={navigationHistory} />
+                <div className="breadcrumb" style={{ backgroundColor: '#333', padding: '10px', color: 'white' }}>
+                    {breadcrumb.length > 0 ? breadcrumb : "Home"}
+                </div>
+            </div>
+            <div style={{ marginTop: '100px' }}> {/* Adjust this value based on your header height */}
+                <Routes>
+                    <Route path={HOME_PATH} element={<Home />} />
+                    <Route path="/event/:eventName/:eventDate" element={<Event />} />
+                    <Route path="/cart/:eventName/:eventDate" element={<Cart />} />
+                    <Route path="/tickets/:eventName/:eventDate" element={<Tickets />} />
+                    <Route path="/confirmation" element={<PurchaseConfirmation />} />
+                    <Route path="/events/:category" element={<Home />} />
+                </Routes>
+            </div>
             <Footer />
         </>
     );
 }
-
-
 
 
 export default App;
