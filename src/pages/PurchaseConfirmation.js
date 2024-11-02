@@ -1,46 +1,58 @@
-import React from 'react';
+import React, {useEffect, useContext} from 'react';
+import { PiSecurityCameraThin } from 'react-icons/pi';
 import { useLocation } from 'react-router-dom';
+import { CartContext } from '../CartContext';
+
 
 
 function PurchaseConfirmation() {
     const location = useLocation();
-    const { state } = location; // This will contain the purchaseData
+    const { resetCart } = useContext(CartContext); 
 
     // Destructure the data from state
+    const { state } = location;
     const {
-        showName,
-        eventDate,
-        totalTickets,
-        boxTickets,
-        orchestraTickets,
-        mainFloorTickets,
-        balconyTickets,
-        totalPrice
-    } = state || {}; // Use state or an empty object if undefined
+        ticketsDetails = [], // This will hold details of each event
+        totalTickets = 0, // Default value if undefined
+        totalPrice = 0 // Default value if undefined
+    } = state || {};
+
+    // Clear the cart when the component mounts
+    useEffect(() => {
+        resetCart();  // Clear cart from local storage
+    }, [resetCart]);
 
     return (
         <div className="confirmation-page">
             <h1>Purchase Confirmation</h1>
-            {state ? (
+            {ticketsDetails.length > 0 ? (
                 <div>
-                    <h3 style={{ textTransform: 'capitalize', textAlign: 'left' }}>
-                        Event: {showName.replace(/-/g, ' ')} </h3>
-
-                    <h3 style={{ textTransform: 'capitalize', textAlign: 'left' }}>
-                        Date: {eventDate} </h3>
-                    <p style={{ marginLeft: '20px' }}><strong>Total Tickets: {totalTickets}</strong></p>
-                    <p style={{ marginLeft: '20px' }}>Box Tickets: {boxTickets}</p>
-                    <p style={{ marginLeft: '20px' }}>Orchestra Tickets: {orchestraTickets}</p>
-                    <p style={{ marginLeft: '20px' }}>Main Floor Tickets: {mainFloorTickets}</p>
-                    <p style={{ marginLeft: '20px' }}>Balcony Tickets: {balconyTickets}</p>
-                    <h2>Total Price: ${totalPrice?.toFixed(2)}</h2>
+                    {ticketsDetails.map((event, index) => (
+                        <div key={index}>
+                            <h3 style={{ textTransform: 'capitalize', textAlign: 'left' }}>
+                                Event: {event.eventName.replace(/-/g, ' ')}
+                            </h3>
+                            <h3 style={{ textTransform: 'capitalize', textAlign: 'left' }}>
+                                Date: {event.eventDate}
+                            </h3>
+                            <ul>
+                                {event.tickets.map((ticket, tIndex) => (
+                                    <li key={tIndex}>
+                                        {ticket.quantity} x {ticket.type} Ticket(s): ${ticket.total.toFixed(2)}
+                                    </li>
+                                ))}
+                            </ul>
+                            <br />
+                        </div>
+                    ))}
+                    <p><strong>Total Tickets: {totalTickets}</strong></p>
+                    <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
                     <button
                         style={{
                             display: 'block',
                             padding: '10px 20px',
                             fontSize: '16px',
                             fontWeight: 'bold',
-
                             backgroundColor: '#FF6700',
                             color: 'white',
                             border: 'none',
@@ -58,4 +70,5 @@ function PurchaseConfirmation() {
         </div>
     );
 }
+
 export default PurchaseConfirmation;

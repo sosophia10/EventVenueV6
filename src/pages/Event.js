@@ -1,12 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext} from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { FaBookmark } from 'react-icons/fa';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { HOME_PATH } from '../App';
+import { CartContext } from '../CartContext'; 
 
 function EventPage() {
     const { eventName, eventDate } = useParams();
+    const {addToCart} = useContext(CartContext);
     const [event, setEvent] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -68,6 +70,25 @@ function EventPage() {
         const eventDates = event.eventDetails.map(detail => detail.date);
         return !eventDates.includes(date.toISOString().split('T')[0]);
     };
+
+    
+
+    const handleTicketChange = (ticketType, quantity) => {
+        const ticketQuantity = parseInt(quantity, 10) || 0;
+
+        // Create tickets array based on selected quantity
+        const tickets = [
+            {
+                type: ticketType,
+                quantity: ticketQuantity,
+                price: event.ticketPrices[ticketType], // Assume you have ticket prices available
+            },
+        ];
+
+        // Add or update the cart
+        addToCart(event.eventName, selectedDate, tickets);
+    };
+
 
     return (
         <div className="event-page">

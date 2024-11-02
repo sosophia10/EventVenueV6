@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import '../styles.css';
-import { Link } from 'react-router-dom'; // If you're using react-router for navigation
+import { Link, useLocation} from 'react-router-dom'; // If you're using react-router for navigation
 
-function Header() {
+function Header({navigationHistory}) {
+
+
   return (
     <header>
       <nav>
@@ -43,7 +45,9 @@ function Header() {
             </ul>
           </li>
         </ul>
+        
       </nav>
+
     </header>
   );
 }

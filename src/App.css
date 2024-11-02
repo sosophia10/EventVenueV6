@@ -37,3 +37,15 @@
         transform: rotate(360deg);
     }
 }
+
+.breadcrumb {
+    position: fixed; /* Fixes the breadcrumb to the viewport */
+    top: 60px; /* Adjust based on the height of your header */
+    left: 0;
+    right: 0;
+    background-color: #333; /* Background color of the breadcrumb */
+    color: white; /* Text color */
+    padding: 10px; /* Padding for the breadcrumb */
+    font-size: 16px; /* Font size */
+    z-index: 1000; /* Ensures it stays above other content */
+}
