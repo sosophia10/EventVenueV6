@@ -7,21 +7,23 @@ import Cart from './pages/Cart';
 import PurchaseConfirmation from './pages/PurchaseConfirmation';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import { CartProvider } from './CartContext';
 import './styles.css';
 
 
 export const HOME_PATH = '/EventVenueV6';
 function App() {
-
     const [navigationHistory, setNavigationHistory] = useState([]);
 
-  
     return (
-      <Router>
-          <AppContent navigationHistory={navigationHistory} setNavigationHistory={setNavigationHistory} />
-      </Router>
-  );
+        <CartProvider> {/* Wrap your application in CartProvider */}
+            <Router>
+                <AppContent navigationHistory={navigationHistory} setNavigationHistory={setNavigationHistory} />
+            </Router>
+        </CartProvider>
+    );
 }
+
 
 function AppContent({ navigationHistory, setNavigationHistory }) {
     const location = useLocation();
