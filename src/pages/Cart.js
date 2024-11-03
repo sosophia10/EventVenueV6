@@ -5,7 +5,7 @@ import '../styles.css';
 import { HOME_PATH } from '../App';
 
 function Cart() {
-    const { cartItems, setCartItems } = useContext(CartContext);
+    const { cartItems, addToCart } = useContext(CartContext);
     const navigate = useNavigate();
     const { eventName, eventDate } = useParams();
     const [event, setEvent] = useState(null);
@@ -62,12 +62,12 @@ function Cart() {
             updatedCart[eventIndex].tickets.splice(ticketIndex, 1);
         }
     
-        setCartItems(updatedCart);
+        addToCart(updatedCart);
     };
 
     const orderSummary = cartItems.map(event => ({
         eventName: event.eventName,
-        eventDate: event.selectedDate,
+        eventDate: event.eventDate,
         tickets: event.tickets.map(ticket => ({
             type: ticket.type,
             quantity: ticket.quantity,
@@ -93,7 +93,7 @@ function Cart() {
     
         const ticketsDetails = cartItems.map(event => ({
             eventName: event.eventName,
-            eventDate: event.selectedDate,
+            eventDate: event.eventDate,
             tickets: event.tickets.map(ticket => ({
                 type: ticket.type,
                 quantity: ticket.quantity,
@@ -128,10 +128,10 @@ function Cart() {
                             Event: {event.eventName.replace(/-/g, ' ')}
                         </h3>
                         <h3 style={{ textTransform: 'capitalize', textAlign: 'left' }}>
-                            Date: {event.selectedDate}
+                            Date: {eventDate}
                         </h3>
                         {["box", "orchestra", "mainFloor", "balcony"].map(type => (
-                            <div key={type} className="ticket-selection">
+                            <div key={type} className="ticket-selection" style={{ marginBottom: '15px' }}>
                                 <label>{`${type.charAt(0).toUpperCase() + type.slice(1)} Tickets:`}</label>
                                 <select
                                     value={event.tickets.find(t => t.type === type)?.quantity || 0}
@@ -141,6 +141,7 @@ function Cart() {
                                         <option key={num} value={num}>{num}</option>
                                     ))}
                                 </select>
+                                
                             </div>
                         ))}
                         <br />

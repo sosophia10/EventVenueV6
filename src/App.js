@@ -13,7 +13,7 @@ import './styles.css';
 
 export const HOME_PATH = '/EventVenueV6';
 function App() {
-    const [navigationHistory, setNavigationHistory] = useState([]);
+    const [navigationHistory, setNavigationHistory] = useState([HOME_PATH]);
 
     return (
         <CartProvider> {/* Wrap your application in CartProvider */}
@@ -85,7 +85,9 @@ function AppContent({ navigationHistory, setNavigationHistory }) {
                 <Routes>
                     <Route path={HOME_PATH} element={<Home />} />
                     <Route path="/event/:eventName/:eventDate" element={<Event />} />
+                    <Route path="/cart" element={<Cart />} />
                     <Route path="/cart/:eventName/:eventDate" element={<Cart />} />
+                    
                     <Route path="/tickets/:eventName/:eventDate" element={<Tickets />} />
                     <Route path="/confirmation" element={<PurchaseConfirmation />} />
                     <Route path="/events/:category" element={<Home />} />

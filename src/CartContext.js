@@ -6,21 +6,32 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
     const [cartItems, setCartItems] = useState([]);
 
-    const addToCart = (eventName, selectedDate, tickets) => {
-        setCartItems((prevItems) => {
-            const existingEventIndex = prevItems.findIndex(
-                item => item.eventName === eventName && item.selectedDate === selectedDate
-            );
-
+    const addToCart = (eventName, eventDate, ticketsToAdd) => {
+        setCartItems(prevCart => {
+            const updatedCart = [...prevCart];
+            const existingEventIndex = updatedCart.findIndex(item => item.eventName === eventName && item.eventDate === eventDate);
+    
             if (existingEventIndex > -1) {
-                // Update existing event tickets
-                const updatedItems = [...prevItems];
-                updatedItems[existingEventIndex].tickets.push(...tickets);
-                return updatedItems;
+                const existingEvent = updatedCart[existingEventIndex];
+                ticketsToAdd.forEach(ticket => {
+                    const ticketIndex = existingEvent.tickets.findIndex(t => t.type === ticket.type);
+                    if (ticketIndex > -1) {
+                        // Update quantity for existing ticket type
+                        existingEvent.tickets[ticketIndex].quantity += ticket.quantity;
+                    } else {
+                        // Add new ticket type
+                        existingEvent.tickets.push(ticket);
+                    }
+                });
+            } else {
+                // Add new event to cart
+                updatedCart.push({
+                    eventName,
+                    eventDate,
+                    tickets: ticketsToAdd,
+                });
             }
-
-            // Add new event with tickets
-            return [...prevItems, { eventName, selectedDate, tickets }];
+            return updatedCart;
         });
     };
 
