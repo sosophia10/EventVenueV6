@@ -11,6 +11,7 @@ function PurchaseConfirmation() {
 
     // Destructure the data from state
     const { state } = location;
+    console.log(state);
     const {
         ticketsDetails = [], // This will hold details of each event
         totalTickets = 0, // Default value if undefined

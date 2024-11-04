@@ -5,7 +5,7 @@ import '../styles.css';
 import { HOME_PATH } from '../App';
 
 function Cart() {
-    const { cartItems, setCartItems } = useContext(CartContext);
+    const { cartItems, addToCart } = useContext(CartContext);
     const navigate = useNavigate();
     const { eventName, eventDate } = useParams();
     const [event, setEvent] = useState(null);
@@ -47,27 +47,46 @@ function Cart() {
         const ticketQuantity = parseInt(quantity, 10) || 0;
         const updatedCart = [...cartItems];
 
-        const ticketIndex = updatedCart[eventIndex].tickets.findIndex(t => t.type === ticketType);
-        if (ticketQuantity > 0) {
-            if (ticketIndex === -1) {
-                updatedCart[eventIndex].tickets.push({
-                    type: ticketType,
-                    quantity: ticketQuantity,
-                    price: ticketPrices[ticketType] 
-                });
-            } else {
-                updatedCart[eventIndex].tickets[ticketIndex].quantity = ticketQuantity;
+        // Ensure we are modifying the correct event in the cart
+        const eventInCart = updatedCart.find(event => event.eventName === eventName && event.eventDate === eventDate);
+
+        // If event is already in cart, update ticket quantities
+        if (eventInCart) {
+            const ticketIndex = eventInCart.tickets.findIndex(t => t.type === ticketType);
+            if (ticketQuantity > 0) {
+                if (ticketIndex === -1) {
+                    eventInCart.tickets.push({
+                        type: ticketType,
+                        quantity: ticketQuantity,
+                        price: ticketPrices[ticketType]
+                    });
+                } else {
+                    eventInCart.tickets[ticketIndex].quantity = ticketQuantity;
+                }
+            } else if (ticketIndex !== -1) {
+                eventInCart.tickets.splice(ticketIndex, 1);
             }
-        } else if (ticketIndex !== -1) {
-            updatedCart[eventIndex].tickets.splice(ticketIndex, 1);
+        } else {
+            // If event is not in the cart, add it with selected tickets
+            updatedCart.push({
+                eventName,
+                eventDate,
+                tickets: [
+                    {
+                        type: ticketType,
+                        quantity: ticketQuantity,
+                        price: ticketPrices[ticketType]
+                    }
+                ]
+            });
         }
-    
-        setCartItems(updatedCart);
+        addToCart(updatedCart);
     };
+
 
     const orderSummary = cartItems.map(event => ({
         eventName: event.eventName,
-        eventDate: event.selectedDate,
+        eventDate: event.eventDate,
         tickets: event.tickets.map(ticket => ({
             type: ticket.type,
             quantity: ticket.quantity,
@@ -93,7 +112,7 @@ function Cart() {
     
         const ticketsDetails = cartItems.map(event => ({
             eventName: event.eventName,
-            eventDate: event.selectedDate,
+            eventDate: event.eventDate,
             tickets: event.tickets.map(ticket => ({
                 type: ticket.type,
                 quantity: ticket.quantity,
@@ -128,10 +147,10 @@ function Cart() {
                             Event: {event.eventName.replace(/-/g, ' ')}
                         </h3>
                         <h3 style={{ textTransform: 'capitalize', textAlign: 'left' }}>
-                            Date: {event.selectedDate}
+                            Date: {eventDate}
                         </h3>
                         {["box", "orchestra", "mainFloor", "balcony"].map(type => (
-                            <div key={type} className="ticket-selection">
+                            <div key={type} className="ticket-selection" style={{ marginBottom: '15px' }}>
                                 <label>{`${type.charAt(0).toUpperCase() + type.slice(1)} Tickets:`}</label>
                                 <select
                                     value={event.tickets.find(t => t.type === type)?.quantity || 0}
@@ -141,6 +160,7 @@ function Cart() {
                                         <option key={num} value={num}>{num}</option>
                                     ))}
                                 </select>
+                                
                             </div>
                         ))}
                         <br />
