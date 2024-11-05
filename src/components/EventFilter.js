@@ -75,100 +75,76 @@ function EventFilter({ onFilterChange }) {
 
     return (
         <div className="event-filter">
-            <div className="filter-group">
-                <label>Search</label>
-                <input
-                    type="text"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
-                    onKeyDown={handleKeyDown} // Trigger search on "Enter"
-                />
-            </div>
-
-            <div className="filter-group">
-                <label>Category</label>
-                <select
-                    value={category}
-                    onChange={(e) => {
-                        setCategory(e.target.value);
-                    }}
-                >
-                    <option value="">All Categories</option>
-                    <option value="Musical">Musical</option>
-                    <option value="Play">Play</option>
-                    <option value="Opera">Opera</option>
-                    <option value="Ballet">Ballet</option>
-                    <option value="Concert">Concert</option>
-                </select>
-            </div>
-
-            <div className="filter-group">
-                <label>Min. Date</label>
-                <input
-                    type="date"
-                    value={minDate}
-                    onChange={(e) => {
-                        setMinDate(e.target.value);
-                    }}
-                />
-            </div>
-
-            <div className="filter-group">
-                <label>Max. Date</label>
-                <input
-                    type="date"
-                    value={maxDate}
-                    onChange={(e) => {
-                        setMaxDate(e.target.value);
-                    }}
-                />
-            </div>
-
-            <div className="filter-group">
-                <label>Min. Time</label>
-                <input
-                    type="time"
-                    value={minTime}
-                    onChange={(e) => {
-                        setMinTime(e.target.value);
-                    }}
-                />
-            </div>
-
-            <div className="filter-group">
-                <label>Max. Time</label>
-                <input
-                    type="time"
-                    value={maxTime}
-                    onChange={(e) => {
-                        setMaxTime(e.target.value);
-                    }}
-                />
-            </div>
-
-            <div className="filter-group">
-                <label>Price Range: ${priceRange[0]} - ${priceRange[1]}</label>
-                <div className="price-slider">
-                    <Slider
-                        range
-                        min={0}
-                        max={500} // Adjust max price range here
-                        value={priceRange}
-                        onChange={handlePriceRangeChange}
-                        trackStyle={[{ backgroundColor: 'black', height: 10 }]} // Track color
-                        handleStyle={[
-                            { borderColor: 'black', height: 20, width: 20, marginTop: -5 },
-                            { borderColor: 'black', height: 20, width: 20, marginTop: -5 },
-                        ]} // Handle color and size
-                        railStyle={{ backgroundColor: 'gray', height: 10 }} // Rail color
+            <h2 className="filter-heading">Filter Events</h2>
+            <div className="filter-items">
+                <div className="filter-group uniform-width">
+                    <label>Find Events By Title</label>
+                    <input
+                        type="text"
+                        value={search}
+                        onChange={(e) => setSearch(e.target.value)}
+                        onKeyDown={handleKeyDown} // Trigger search on "Enter"
                     />
+                    <div className="filter-buttons">
+                        <button onClick={handleSearchClick}>Search</button>
+                        <button onClick={handleClearFilters}>Clear</button>
+                    </div>
                 </div>
-            </div>
 
-            {/* Search and Clear Buttons */}
-            <div className="filter-buttons">
-                <button onClick={handleSearchClick}>Search</button> {/* Search Button */}
-                <button onClick={handleClearFilters}>Clear</button> {/* Clear Button */}
+                <div className="filter-group uniform-width">
+                    <label>Select Genre</label>
+                    <select
+                        value={category}
+                        onChange={(e) => {
+                            setCategory(e.target.value);
+                        }}
+                    >
+                        <option value="">All Genres</option>
+                        <option value="Musical">Musical</option>
+                        <option value="Play">Play</option>
+                        <option value="Opera">Opera</option>
+                        <option value="Ballet">Ballet</option>
+                        <option value="Concert">Concert</option>
+                    </select>
+                </div>
+
+                <div className="filter-group date-range-group uniform-width">
+                    <label>Performance Date Range</label>
+                    <div className="date-range">
+                        <input
+                            type="date"
+                            value={minDate}
+                            onChange={(e) => setMinDate(e.target.value)}
+                            placeholder="Start Date"
+                        />
+                        <span className="date-separator">to</span>
+                        <input
+                            type="date"
+                            value={maxDate}
+                            onChange={(e) => setMaxDate(e.target.value)}
+                            placeholder="End Date"
+                        />
+                    </div>
+                </div>
+
+                <div className="filter-group uniform-width">
+                    <label>Price Range: ${priceRange[0]} - ${priceRange[1]}</label>
+                    <div className="price-slider">
+                        <Slider
+                            range
+                            min={0}
+                            max={500}
+                            value={priceRange}
+                            onChange={handlePriceRangeChange}
+                            trackStyle={[{ backgroundColor: 'black', height: 10 }]}
+                            handleStyle={[
+                                { borderColor: 'black', height: 20, width: 20, marginTop: -5 },
+                                { borderColor: 'black', height: 20, width: 20, marginTop: -5 },
+                            ]}
+                            railStyle={{ backgroundColor: 'gray', height: 10 }}
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     );

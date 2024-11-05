@@ -12,7 +12,6 @@ function Cart() {
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
     const [ticketPrices, setTicketPrices] = useState(null);
-    const [showModal, setShowModal] = useState(false);
 
     useEffect(() => {
         fetch(`${process.env.PUBLIC_URL}/events-mock-data.json`)
@@ -43,11 +42,15 @@ function Cart() {
     if (loading) return <p>Loading...</p>;
     if (error) return <p className="error">{error}</p>;
 
+    
     const handleTicketChange = (ticketType, quantity, eventIndex) => {
         const ticketQuantity = parseInt(quantity, 10) || 0;
         const updatedCart = [...cartItems];
+
+        // Ensure we are modifying the correct event in the cart
         const eventInCart = updatedCart.find(event => event.eventName === eventName && event.eventDate === eventDate);
 
+        // If event is already in cart, update ticket quantities
         if (eventInCart) {
             const ticketIndex = eventInCart.tickets.findIndex(t => t.type === ticketType);
             if (ticketQuantity > 0) {
@@ -64,6 +67,7 @@ function Cart() {
                 eventInCart.tickets.splice(ticketIndex, 1);
             }
         } else {
+            // If event is not in the cart, add it with selected tickets
             updatedCart.push({
                 eventName,
                 eventDate,
@@ -79,6 +83,7 @@ function Cart() {
         addToCart(updatedCart);
     };
 
+
     const orderSummary = cartItems.map(event => ({
         eventName: event.eventName,
         eventDate: event.eventDate,
@@ -89,6 +94,13 @@ function Cart() {
         }))
     }));
 
+    // Calculate total tickets and total price
+    const totalTickets = orderSummary.reduce((total, event) => {
+        return total + event.tickets.reduce((eventTotal, ticket) => {
+            return eventTotal + ticket.quantity;
+        }, 0);
+    }, 0);
+
     const totalPrice = cartItems.reduce((total, event) => {
         return total + event.tickets.reduce((eventTotal, ticket) => {
             return eventTotal + (ticket.quantity * ticket.price);
@@ -96,23 +108,32 @@ function Cart() {
     }, 0);
 
     const handlePurchase = () => {
-        setShowModal(true);
-    };
-
-    const confirmPurchase = () => {
-        setShowModal(false);
+        console.log("Order Summary:", orderSummary);
+    
+        const ticketsDetails = cartItems.map(event => ({
+            eventName: event.eventName,
+            eventDate: event.eventDate,
+            tickets: event.tickets.map(ticket => ({
+                type: ticket.type,
+                quantity: ticket.quantity,
+                total: ticket.quantity * ticket.price // Calculate total per ticket type
+            }))
+        }));
+    
+        // Create a summary of total tickets and prices
+        const totalTickets = ticketsDetails.reduce((sum, event) => sum + event.tickets.reduce((tSum, ticket) => tSum + ticket.quantity, 0), 0);
+        const totalPrice = ticketsDetails.reduce((sum, event) => sum + event.tickets.reduce((tSum, ticket) => tSum + ticket.total, 0), 0);
+    
         navigate('/confirmation', {
             state: {
-                ticketsDetails: orderSummary,
-                totalTickets: cartItems.reduce((total, event) => total + event.tickets.reduce((tSum, ticket) => tSum + ticket.quantity, 0), 0),
+                ticketsDetails, // Pass the details for each event's tickets
+                totalTickets,
                 totalPrice
             }
         });
     };
 
-    const closeModal = () => {
-        setShowModal(false);
-    };
+  
 
     return (
         <div className="cart-page">
@@ -139,6 +160,7 @@ function Cart() {
                                         <option key={num} value={num}>{num}</option>
                                     ))}
                                 </select>
+                                
                             </div>
                         ))}
                         <br />
@@ -147,20 +169,21 @@ function Cart() {
             )}
             <h2>Total Price: ${totalPrice.toFixed(2)}</h2>
             <div style={{ display: 'flex', gap: '10px' }}>
-                <button
-                    style={{
-                        padding: '10px 20px',
-                        fontSize: '16px',
-                        fontWeight: 'bold',
-                        backgroundColor: '#FF6700',
-                        color: 'white',
-                        border: 'none',
-                        borderRadius: '8px',
-                        cursor: 'pointer',
-                    }}
-                    onClick={handlePurchase}
-                >
-                    Purchase
+            <button
+                style={{
+                    display: 'block',
+                    padding: '10px 20px',
+                    fontSize: '16px',
+                    fontWeight: 'bold',
+                    backgroundColor: '#FF6700',
+                    color: 'white',
+                    border: 'none',
+                    borderRadius: '8px',
+                    cursor: 'pointer',
+                }}
+                onClick={handlePurchase}
+            >
+                Purchase
                 </button>
                 <Link to={HOME_PATH}>
                     <button
@@ -179,27 +202,6 @@ function Cart() {
                     </button>
                 </Link>
             </div>
-
-            {showModal && (
-                <div className="modal-overlay">
-                    <div className="modal-content">
-                        <h2>Are you sure you want to purchase?</h2>
-                        <div>
-                            {orderSummary.map((event, index) => (
-                                <div key={index}>
-                                    <h3>{event.eventName} - {event.eventDate}</h3>
-                                    {event.tickets.map((ticket, i) => (
-                                        <p key={i}>{ticket.quantity} x {ticket.type} - ${ticket.total.toFixed(2)}</p>
-                                    ))}
-                                </div>
-                            ))}
-                        </div>
-                        <h3>Total: ${totalPrice.toFixed(2)}</h3>
-                        <button onClick={closeModal}>Cancel</button>
-                        <button onClick={confirmPurchase}>Yes</button>
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
