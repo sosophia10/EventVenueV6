@@ -44,7 +44,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## Project Installation Instructions
 **1. Clone the Repository**
-   - ```git clone https://github.com/username/repo-name.git```
+   - ```git clone https://github.com/github-username/repo-name.git```
 
 **2. Install Dependencies into the Root Folder of the Repo**
    - Change to the project directory: ```cd repo-name```
