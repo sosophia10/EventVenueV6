@@ -2,7 +2,7 @@
 
 This is a React-based web application designed to facilitate purchasing tickets for various events, such as concerts and shows. The app prioritizes a user-friendly interface for browsing upcoming events, viewing event details, filtering and searching for events, and completing ticket purchases seamlessly.
 
-See deployed project [here](https://eewilson32.github.io/EventVenueV6).
+### See deployed project [here](https://eewilson32.github.io/EventVenueV6).
 
 ## User Goals
 
