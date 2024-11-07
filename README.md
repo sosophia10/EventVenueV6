@@ -24,30 +24,29 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 > **Note: Ensure you have Node.js installed. npm comes bundled with Node.js, so installing Node.js will also install npm.**
 
 ## Dependency Installation Instructions
----   
-> **On macOS** (using Homebrew)
-> 1. Open your terminal and run:
->    ```brew install node```
----   
-> **On Ubuntu/Debian** (using NodeSource)
-> 1. Open your terminal and run:
->    - ```sudo apt update``` to udate your package list.
->    - ```sudo apt install -y curl``` to install additional prerequisites.
-> 3. Add the Node.js repository and install Node.js:
->    - ```curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -```
->    - ```sudo apt install -y nodejs```
----   
-> **On Windows** (using Windows Package Manager)
-> 1. Open Command Prompt or PowerShell and run:
->    ```winget install OpenJS.NodeJS```
----   
-> **After installation, you can verify by running ```node -v``` and ```npm -v``` in your terminal to check if Node.js and npm are installed correctly.**
----   
+
+> ### **On macOS** (using Homebrew)
+1. Open your terminal and run:
+    ```brew install node```
+ 
+> ### **On Ubuntu/Debian** (using NodeSource)
+1. Open your terminal and run:
+    - ```sudo apt update``` to udate your package list.
+    - ```sudo apt install -y curl``` to install additional prerequisites.
+3. Add the Node.js repository and install Node.js:
+    - ```curl -sL https://deb.nodesource.com/setup_18.x | sudo -E bash -```
+    - ```sudo apt install -y nodejs```
+
+> ### **On Windows** (using Windows Package Manager)
+1. Open Command Prompt or PowerShell and run:
+    ```winget install OpenJS.NodeJS```
+> ### **After installation, run ```node -v``` and ```npm -v``` to verify that Node.js and npm are installed correctly.**
+
 ## Project Installation Instructions
 **1. Clone the Repository**
    - ```git clone https://github.com/username/repo-name.git```
 
-**2. Install Dependencies**
+**2. Install Dependencies into the Root Folder of the Repo**
    - Change to the project directory: ```cd repo-name```
    - ```npm install```
 
@@ -58,8 +57,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
    - The page will reload when you make changes.
    - You may also see any lint errors in the console.
 
-# Developer's FAQ
 
+
+# Developer's FAQ
 
 **1. How do I install Node.js and npm?**
 > _Visit the [Node.js official website](https://nodejs.org/en) to download and install Node.js, which includes npm (Node Package Manager)._
